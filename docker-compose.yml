@@ -8,7 +8,7 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stat_bd
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stats_bd
       - SPRING_DATASOURCE_USERNAME=explore
       - SPRING_DATASOURCE_PASSWORD=explore
 
@@ -20,7 +20,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=explore
       - POSTGRES_USER=explore
-      - POSTGRES_DB=stat_db
+      - POSTGRES_DB=stats_db
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s

@@ -13,8 +13,15 @@ import java.util.Map;
 
 @Service
 public class StatsClient extends BaseClient {
+
+    @Value("${server.application.name:ewm-main-service}")
+    private String applicationName;
+
+    @Value("${server.application.url}")
+    private String serverUrl;
+
     @Autowired
-    public StatsClient(@Value("${service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -24,7 +31,7 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> postHit(EndpointHitDto endpointHitDto) {
-    return post("/hit", endpointHitDto);
+        return post("/hit", endpointHitDto);
     }
 
     public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {

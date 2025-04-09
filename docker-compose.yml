@@ -32,7 +32,7 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - main-db
+      - ewm-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/main_bd
       - SPRING_DATASOURCE_USERNAME=explore

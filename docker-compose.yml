@@ -8,7 +8,7 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stats_bd
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_bd
       - SPRING_DATASOURCE_USERNAME=explore
       - SPRING_DATASOURCE_PASSWORD=explore
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
@@ -34,7 +34,7 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/main_bd
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5433/main_bd
       - SPRING_DATASOURCE_USERNAME=explore
       - SPRING_DATASOURCE_PASSWORD=explore
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver

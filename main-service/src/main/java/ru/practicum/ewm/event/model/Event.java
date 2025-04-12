@@ -1,9 +1,10 @@
-package ru.practicum.ewm.event;
+package ru.practicum.ewm.event.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import ru.practicum.ewm.category.Category;
+import ru.practicum.ewm.event.model.enums.EventState;
 import ru.practicum.ewm.user.User;
 
 import java.time.LocalDateTime;

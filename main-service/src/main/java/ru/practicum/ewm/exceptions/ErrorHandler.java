@@ -28,12 +28,25 @@ public class ErrorHandler {
 
     @ExceptionHandler(ConflictException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleConflictException(NotFoundException e) {
+    public ApiError handleConflictException(ConflictException e) {
         log.error("409 CONFLICT {} ", e.getMessage());
         return ApiError.builder()
                 .errors(Collections.singletonList(e.getMessage()))
                 .status(HttpStatus.CONFLICT.name())
                 .reason("Попытка добавления уже существующих данных")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleForbiddenException(ForbiddenException e) {
+        log.error("409 FORBIDDEN {} ", e.getMessage());
+        return ApiError.builder()
+                .errors(Collections.singletonList(e.getMessage()))
+                .status(HttpStatus.FORBIDDEN.name())
+                .reason("Некорректно составлен запрос")
                 .message(e.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();

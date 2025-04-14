@@ -25,7 +25,7 @@ public class NewEventDto {
 
     @NotNull(message = "Поле category не может быть null")
     @NotBlank(message = "Поле category не может быть пустым")
-    private int category;
+    private Integer category;
 
     @NotNull(message = "Поле description не может быть null")
     @NotBlank(message = "Поле description не может быть пустым")
@@ -40,12 +40,14 @@ public class NewEventDto {
     @NotBlank(message = "Поле location не может быть пустым")
     private Location location;
 
-    private boolean paid;
+    @Builder.Default
+    private Boolean paid = false;
 
     @PositiveOrZero
-    private int participantLimit;
+    private Integer participantLimit;
 
-    private boolean requestModeration;
+    @Builder.Default
+    private Boolean requestModeration = true;
 
     @NotNull(message = "Поле title не может быть null")
     @NotBlank(message = "Поле title не может быть пустым")

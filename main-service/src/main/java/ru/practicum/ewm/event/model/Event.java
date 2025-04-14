@@ -20,7 +20,7 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "annotation", nullable = false)
     @Size(min = 20, max = 2000)
@@ -31,7 +31,7 @@ public class Event {
     private Category category;
 
     @Column(name = "confirmed_requests")
-    private int confirmedRequests;
+    private Integer confirmedRequests;
 
     @Column(name = "created_date")
     private LocalDateTime createdOn;
@@ -52,16 +52,16 @@ public class Event {
     private Location location;
 
     @Column(name = "paid")
-    private boolean paid;
+    private Boolean paid;
 
-    @Column(name = "limit")
-    private int participantLimit;
+    @Column(name = "participant_limit")
+    private Integer participantLimit;
 
     @Column(name = "published_date", nullable = false)
     private LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)

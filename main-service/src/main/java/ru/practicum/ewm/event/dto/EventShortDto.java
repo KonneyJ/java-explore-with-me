@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class EventShortDto {
-    private int id;
+    private Integer id;
 
     @NotNull(message = "Поле annotation не может быть null")
     @NotBlank(message = "Поле annotation не может быть пустым")
@@ -27,7 +27,7 @@ public class EventShortDto {
     @NotBlank(message = "Поле category не может быть пустым")
     private CategoryDto category;
 
-    private int confirmedRequests;
+    private Integer confirmedRequests;
 
     @NotNull(message = "Поле eventDate не может быть null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -38,11 +38,11 @@ public class EventShortDto {
     private UserShortDto initiator;
 
     @NotBlank(message = "Поле paid не может быть пустым")
-    private boolean paid;
+    private Boolean paid;
 
     @NotNull(message = "Поле title не может быть null")
     @NotBlank(message = "Поле title не может быть пустым")
     private String title;
 
-    private int views;
+    private Integer views;
 }

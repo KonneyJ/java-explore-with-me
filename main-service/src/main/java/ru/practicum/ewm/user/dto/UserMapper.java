@@ -27,4 +27,11 @@ public class UserMapper {
                 .email(newUserRequest.getEmail())
                 .build();
     }
+
+    public static UserShortDto toUserShortDto(User user) {
+        return UserShortDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .build();
+    }
 }

@@ -19,7 +19,7 @@ public class UpdateEventUserRequest {
     @Size(min = 20, max = 2000)
     private String annotation;
 
-    private int category;
+    private Integer category;
 
     @Size(min = 20, max = 7000)
     private String description;
@@ -29,11 +29,11 @@ public class UpdateEventUserRequest {
 
     private Location location;
 
-    private boolean paid;
+    private Boolean paid;
 
-    private int participantLimit;
+    private Integer participantLimit;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
     private StateActionUser stateAction;
 

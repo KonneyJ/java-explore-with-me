@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class EventFullDto {
-    private int id;
+    private Integer id;
 
     @NotNull(message = "Поле annotation не может быть null")
     @NotBlank(message = "Поле annotation не может быть пустым")
@@ -29,7 +29,7 @@ public class EventFullDto {
     @NotBlank(message = "Поле category не может быть пустым")
     private CategoryDto category;
 
-    private int confirmedRequests;
+    private Integer confirmedRequests;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
@@ -49,14 +49,14 @@ public class EventFullDto {
     private Location location;
 
     @NotBlank(message = "Поле paid не может быть пустым")
-    private boolean paid;
+    private Boolean paid;
 
-    private int participantLimit;
+    private Integer participantLimit;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
-    private boolean requestModeration;
+    private Boolean requestModeration;
 
     private EventState state;
 
@@ -64,5 +64,5 @@ public class EventFullDto {
     @NotBlank(message = "Поле title не может быть пустым")
     private String title;
 
-    private int views;
+    private Integer views;
 }

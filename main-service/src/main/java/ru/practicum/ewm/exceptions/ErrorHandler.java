@@ -52,4 +52,17 @@ public class ErrorHandler {
                 .build();
     }
 
+    @ExceptionHandler(IncorrectParamException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleIncorrectParamException(IncorrectParamException e) {
+        log.error("400 BAD REQUEST {} ", e.getMessage());
+        return ApiError.builder()
+                .errors(Collections.singletonList(e.getMessage()))
+                .status(HttpStatus.BAD_REQUEST.name())
+                .reason("Некорректные параметры запроса")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
 }

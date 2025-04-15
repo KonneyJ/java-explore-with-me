@@ -1,11 +1,11 @@
 package ru.practicum.ewm.event.dto;
 
-import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 import ru.practicum.ewm.category.dto.CategoryMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.dto.UserMapper;
 
-@UtilityClass
+@Component
 public class EventMapper {
 
     public static Event toEvent(NewEventDto newEventDto) {
@@ -50,6 +50,34 @@ public class EventMapper {
                 .eventDate(event.getEventDate())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
+                .title(event.getTitle())
+                .build();
+    }
+
+    public static UpdateEventRequest toUpdateEventRequest(UpdateEventUserRequest event) {
+        return new UpdateEventRequest().builder()
+                .annotation(event.getAnnotation())
+                .category(event.getCategory())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .location(event.getLocation())
+                .paid(event.getPaid())
+                .participantLimit(event.getParticipantLimit())
+                .requestModeration(event.getRequestModeration())
+                .title(event.getTitle())
+                .build();
+    }
+
+    public static UpdateEventRequest toUpdateEventRequest(UpdateEventAdminRequest event) {
+        return new UpdateEventRequest().builder()
+                .annotation(event.getAnnotation())
+                .category(event.getCategory())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .location(event.getLocation())
+                .paid(event.getPaid())
+                .participantLimit(event.getParticipantLimit())
+                .requestModeration(event.getRequestModeration())
                 .title(event.getTitle())
                 .build();
     }

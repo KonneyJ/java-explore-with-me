@@ -10,7 +10,7 @@ import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.CategoryMapper;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
-import ru.practicum.ewm.event.EventRepository;
+import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exceptions.ConflictException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 

@@ -10,7 +10,7 @@ public interface CompilationService {
 
     CompilationDto getCompilationById(int compId);
 
-    Collection<CompilationDto> getAllCompilations(boolean pinned, int from, int size);
+    Collection<CompilationDto> getAllCompilations(Boolean pinned, int from, int size);
 
     CompilationDto createCompilation(NewCompilationDto newCompilationDto);
 

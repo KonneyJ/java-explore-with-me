@@ -1,9 +1,10 @@
 package ru.practicum.ewm.user.dto;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Component;
 import ru.practicum.ewm.user.User;
 
-@UtilityClass
+@Component
 public class UserMapper {
     public static UserDto toUserDto(User user) {
         return UserDto.builder()

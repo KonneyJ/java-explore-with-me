@@ -24,12 +24,12 @@ public class EventPublicController {
     @GetMapping
     public Collection<EventShortDto> getAllEvents(@RequestParam(required = false) String text,
                                                   @RequestParam(required = false) List<Integer> categories,
-                                                  @RequestParam(required = false) boolean paid,
+                                                  @RequestParam(required = false) Boolean paid,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                       LocalDateTime rangeStart,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                       LocalDateTime rangeEnd,
-                                                  @RequestParam(defaultValue = "false") boolean onlyAvailable,
+                                                  @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam(required = false) String sort,
                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                   @RequestParam(defaultValue = "10") @Positive int size) {

@@ -70,4 +70,7 @@ public class Event {
     @Column(name = "title", nullable = false)
     @Size(min = 3, max = 120)
     private String title;
+
+    @Transient
+    private Integer views;
 }

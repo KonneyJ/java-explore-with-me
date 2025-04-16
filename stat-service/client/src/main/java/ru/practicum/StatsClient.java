@@ -11,17 +11,17 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import java.util.List;
 import java.util.Map;
 
-@Service
+@Service(value = "statsClient")
 public class StatsClient extends BaseClient {
 
-    @Value("${server.application.name:ewm-main-service}")
+    /*@Value("${server.application.name:ewm-main-service}")
     private String applicationName;
 
     @Value("${server.application.url}")
-    private String serverUrl;
+    private String serverUrl;*/
 
     @Autowired
-    public StatsClient(String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${stats-service.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

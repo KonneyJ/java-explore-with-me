@@ -1,6 +1,5 @@
 package ru.practicum.ewm.category.dto;
 
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.category.Category;
 

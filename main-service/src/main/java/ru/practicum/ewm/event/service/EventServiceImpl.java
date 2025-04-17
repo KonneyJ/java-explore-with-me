@@ -15,6 +15,7 @@ import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.Location;
+import ru.practicum.ewm.event.model.QEvent;
 import ru.practicum.ewm.event.model.enums.EventState;
 import ru.practicum.ewm.event.model.enums.StateActionAdmin;
 import ru.practicum.ewm.event.model.enums.StateActionUser;
@@ -64,7 +65,7 @@ public class EventServiceImpl implements EventService {
         PageRequest page = PageRequest.of(from, size, Sort.by("eventDate").ascending());
         BooleanBuilder builder = new BooleanBuilder();
 
-        /*if (users != null && !users.isEmpty()) {
+        if (users != null && !users.isEmpty()) {
             builder.and(QEvent.event.initiator.id.in(users));
         }
 
@@ -72,27 +73,27 @@ public class EventServiceImpl implements EventService {
             builder.and(QEvent.event.state.in(states));
         }
 
-        if(categories != null && !categories.isEmpty()) {
+        if (categories != null && !categories.isEmpty()) {
             builder.and(QEvent.event.category.id.in(categories));
         }
 
-        if(rangeStart != null) {
+        if (rangeStart != null) {
             builder.and(QEvent.event.eventDate.after(rangeStart));
         }
 
-        if(rangeEnd != null) {
+        if (rangeEnd != null) {
             builder.and(QEvent.event.eventDate.before(rangeEnd));
         }
 
         if (rangeStart == null && rangeEnd == null) {
-            builder.and(QEvent.event.eventDate.after(LocalDateTime.now());
+            builder.and(QEvent.event.eventDate.after(LocalDateTime.now()));
         }
 
         if (builder.getValue() != null) {
             events = eventRepository.findAll(builder.getValue(), page).getContent();
         } else {
             events = eventRepository.findAll(page).getContent();
-        }*/
+        }
 
         getViews(events);
 
@@ -150,9 +151,9 @@ public class EventServiceImpl implements EventService {
         List<Event> events = new ArrayList<>();
         PageRequest page = PageRequest.of(from, size, Sort.by("eventDate").ascending());
         BooleanBuilder builder = new BooleanBuilder();
-        //builder.and(QEvent.event.state.eq(EventState.PUBLISHED));
+        builder.and(QEvent.event.state.eq(EventState.PUBLISHED));
 
-        /*if (text != null && !text.isBlank()) {
+        if (text != null && !text.isBlank()) {
             builder.and(QEvent.event.annotation.containsIgnoreCase(text.toLowerCase())
                     .or(QEvent.event.description.containsIgnoreCase(text.toLowerCase())));
         }
@@ -182,7 +183,7 @@ public class EventServiceImpl implements EventService {
             events = eventRepository.findAll(builder.getValue(), page).getContent();
         } else {
             events = eventRepository.findAll(page).getContent();
-        }*/
+        }
 
         getViews(events);
 

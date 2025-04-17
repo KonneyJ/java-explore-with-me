@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.event.service.EventService;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.event.model.enums.EventState;
+import ru.practicum.ewm.event.service.EventService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -30,7 +30,7 @@ public class EventAdminController {
                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                  LocalDateTime rangeStart,
                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                     LocalDateTime rangeEnd,
+                                                 LocalDateTime rangeEnd,
                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                  @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("GET /admin/events запрос with users {}, states {}, categories {}, rangeStart {}, rangeEnd {}," +

@@ -1,6 +1,5 @@
 package ru.practicum.ewm.request.dto;
 
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.request.model.Request;
 

@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = checkCategoryExist(catId);
 
         log.info("Проверка наличия событий привязанных к катеории");
-        if(eventRepository.findByCategoryId(catId)) {
+        if (eventRepository.findByCategoryId(catId)) {
             throw new ConflictException("Нельзя удалить категорию, с которой связаны события");
         }
 

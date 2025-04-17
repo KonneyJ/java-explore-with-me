@@ -20,7 +20,7 @@ public class CompilationMapper {
                 .build();
     }
 
-    public static Compilation toCompilation (NewCompilationDto newCompilationDto) {
+    public static Compilation toCompilation(NewCompilationDto newCompilationDto) {
         return Compilation.builder()
                 .pinned(newCompilationDto.getPinned())
                 .title(newCompilationDto.getTitle())

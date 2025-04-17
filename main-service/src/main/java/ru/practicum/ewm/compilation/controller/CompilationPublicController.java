@@ -5,8 +5,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.compilation.service.CompilationService;
 import ru.practicum.ewm.compilation.dto.CompilationDto;
+import ru.practicum.ewm.compilation.service.CompilationService;
 
 import java.util.Collection;
 
@@ -21,7 +21,7 @@ public class CompilationPublicController {
     public Collection<CompilationDto> getAllCompilations(@RequestParam(required = false) Boolean pinned,
                                                          @RequestParam(defaultValue = "0") @PositiveOrZero int from,
                                                          @RequestParam(defaultValue = "10") @Positive int size) {
-        log.info("PUBLIC GET /compilations запрос with pinned {}, from {}, size {}", pinned,  from, size);
+        log.info("PUBLIC GET /compilations запрос with pinned {}, from {}, size {}", pinned, from, size);
         return compilationService.getAllCompilations(pinned, from, size);
     }
 

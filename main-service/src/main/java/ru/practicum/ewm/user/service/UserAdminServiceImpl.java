@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.exceptions.ConflictException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.user.User;
-import ru.practicum.ewm.user.dto.UserMapper;
 import ru.practicum.ewm.user.UserRepository;
 import ru.practicum.ewm.user.dto.NewUserRequest;
 import ru.practicum.ewm.user.dto.UserDto;
+import ru.practicum.ewm.user.dto.UserMapper;
 
 import java.util.ArrayList;
 import java.util.Collection;

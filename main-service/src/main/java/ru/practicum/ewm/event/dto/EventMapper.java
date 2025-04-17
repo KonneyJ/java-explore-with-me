@@ -9,7 +9,7 @@ import ru.practicum.ewm.user.dto.UserMapper;
 public class EventMapper {
 
     public static Event toEvent(NewEventDto newEventDto) {
-        return new Event().builder()
+        return Event.builder()
                 .annotation(newEventDto.getAnnotation())
                 .description(newEventDto.getDescription())
                 .eventDate(newEventDto.getEventDate())
@@ -22,7 +22,7 @@ public class EventMapper {
     }
 
     public static EventFullDto toEventFullDto(Event event) {
-        return new EventFullDto().builder()
+        return EventFullDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
@@ -43,7 +43,7 @@ public class EventMapper {
     }
 
     public static EventShortDto toEventShortDto(Event event) {
-        return new EventShortDto().builder()
+        return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
@@ -57,7 +57,7 @@ public class EventMapper {
     }
 
     public static UpdateEventRequest toUpdateEventRequest(UpdateEventUserRequest event) {
-        return new UpdateEventRequest().builder()
+        return UpdateEventRequest.builder()
                 .annotation(event.getAnnotation())
                 .category(event.getCategory())
                 .description(event.getDescription())
@@ -71,7 +71,7 @@ public class EventMapper {
     }
 
     public static UpdateEventRequest toUpdateEventRequest(UpdateEventAdminRequest event) {
-        return new UpdateEventRequest().builder()
+        return UpdateEventRequest.builder()
                 .annotation(event.getAnnotation())
                 .category(event.getCategory())
                 .description(event.getDescription())

@@ -39,7 +39,7 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5433/main_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/main_db
       - SPRING_DATASOURCE_USERNAME=explore
       - SPRING_DATASOURCE_PASSWORD=explore
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
@@ -48,7 +48,7 @@ services:
     image: postgres:16.1
     container_name: ewm-db
     ports:
-      - "6542:5433"
+      - "6542:5432"
     environment:
       - POSTGRES_PASSWORD=explore
       - POSTGRES_USER=explore

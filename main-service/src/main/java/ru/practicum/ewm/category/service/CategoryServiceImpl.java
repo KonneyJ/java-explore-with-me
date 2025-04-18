@@ -10,8 +10,10 @@ import ru.practicum.ewm.category.CategoryRepository;
 import ru.practicum.ewm.category.dto.CategoryDto;
 import ru.practicum.ewm.category.dto.CategoryMapper;
 import ru.practicum.ewm.category.dto.NewCategoryDto;
+import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exceptions.ConflictException;
+import ru.practicum.ewm.exceptions.ForbiddenException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 
 import java.util.Collection;
@@ -42,7 +44,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = checkCategoryExist(catId);
 
         log.info("Проверка наличия событий привязанных к катеории");
-        if (eventRepository.findByCategoryId(catId)) {
+        List<Event> events = eventRepository.findByCategory(category);
+        if ((events != null) && (!events.isEmpty())) {
             throw new ConflictException("Нельзя удалить категорию, с которой связаны события");
         }
 
@@ -71,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Collection<CategoryDto> getAllCategories(int from, int size) {
         log.info("Получение списка категорий с from {}, size {}", from, size);
-        PageRequest page = PageRequest.of(from, size, Sort.by("category_id").ascending());
+        PageRequest page = PageRequest.of(from, size, Sort.by("id").ascending());
         List<Category> categories = categoryRepository.findAll(page).getContent();
 
         log.info("Категории успешно найдены");
@@ -95,7 +98,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void checkUniqueName(String name) {
-        if (categoryRepository.findByName(name)) {
+        if (categoryRepository.findByName(name) != null) {
             throw new ConflictException("Категория с name: " + name + " уже существует. Добавление невозможно");
         }
     }

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.event.dto.EventFullDto;
 import ru.practicum.ewm.event.dto.EventShortDto;
@@ -21,6 +23,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
+@Validated
 public class EventPrivateController {
     private final EventService eventService;
 
@@ -33,6 +36,7 @@ public class EventPrivateController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@PathVariable("userId") int userId,
                                     @Valid @RequestBody NewEventDto newEventDto) {
         log.info("PRIVATE POST /users/{userId}/events запрос with userId {}, newEventDto {}", userId, newEventDto);
@@ -66,9 +70,9 @@ public class EventPrivateController {
     @PatchMapping("/{eventId}/requests")
     public EventRequestStatusUpdateResult updateEventRequestByUser(@PathVariable("userId") int userId,
                                                                    @PathVariable("eventId") int eventId,
-                                                                   @Valid @RequestBody EventRequestStatusUpdateRequest
+                                                                   @RequestBody EventRequestStatusUpdateRequest
                                                                            eventRequestStatusUpdateRequest) {
-        log.info("PRIVATE GET /users/{userId}/events/{eventId}/requests запрос with userId {}, eventId {}, " +
+        log.info("PRIVATE PATCH /users/{userId}/events/{eventId}/requests запрос with userId {}, eventId {}, " +
                 "updateRequest {}", userId, eventId, eventRequestStatusUpdateRequest);
         return eventService.updateEventRequestByUser(userId, eventId, eventRequestStatusUpdateRequest);
     }

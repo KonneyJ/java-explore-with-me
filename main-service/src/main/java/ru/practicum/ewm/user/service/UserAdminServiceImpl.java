@@ -28,7 +28,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public Collection<UserDto> getUsers(List<Integer> ids, int from, int size) {
         log.info("Получение списка пользователей с ids {}, from {}, size {}", ids, from, size);
-        PageRequest page = PageRequest.of(from, size, Sort.by("user_id").ascending());
+        PageRequest page = PageRequest.of(from, size, Sort.by("id").ascending());
         List<User> users = new ArrayList<>();
         if (ids == null || ids.isEmpty()) {
             users = userRepository.findAll(page).getContent();
@@ -44,7 +44,7 @@ public class UserAdminServiceImpl implements UserAdminService {
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
         log.info("Проверка наличия пользователя с email {}", newUserRequest.getEmail());
-        if (userRepository.findByEmail(newUserRequest.getEmail())) {
+        if (userRepository.findByEmail(newUserRequest.getEmail()) != null) {
             throw new ConflictException("Пользователь с email: " + newUserRequest.getEmail() + " уже существует. " +
                     "Добавление невозможно");
         }

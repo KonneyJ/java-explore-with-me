@@ -49,7 +49,7 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Событие с id = " + eventId + " не найдено"));
 
-        if (requestRepository.findByRequesterIdAndEventId(userId, eventId)) {
+        if (requestRepository.findByRequesterIdAndEventId(userId, eventId) != null) {
             throw new ConflictException("Заявка уже существует. Нельзя добавить повторный запрос");
         }
 
@@ -67,7 +67,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         Request request = new Request();
-        if (event.getRequestModeration()) {
+        if (event.getRequestModeration() && (event.getParticipantLimit() != 0)) {
             request.setStatus(RequestStatus.PENDING);
         } else {
             request.setStatus(RequestStatus.CONFIRMED);

@@ -51,7 +51,7 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
-    private final StatsClient statsClient;
+    //private final StatsClient statsClient;
 
     @Override
     public Collection<EventFullDto> getAllEventsByAdmin(List<Integer> users, List<EventState> states,
@@ -95,7 +95,7 @@ public class EventServiceImpl implements EventService {
             events = eventRepository.findAll(page).getContent();
         }
 
-        getViews(events);
+        //getViews(events);
 
         log.info("События успешно найдены");
         return events.stream()
@@ -109,13 +109,13 @@ public class EventServiceImpl implements EventService {
         Event event = checkEventExist(eventId);
 
         if (updateEvent.getEventDate() != null) {
-            if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-                throw new ForbiddenException("Дата начала события не соответствует, установленым правилам");
+            if (updateEvent.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+                throw new IncorrectParamException("Дата начала события не соответствует, установленым правилам");
             }
         }
 
         if (!event.getState().equals(EventState.PENDING)) {
-            throw new ForbiddenException("Событие можно редактировать только если оно находится в состоянии" +
+            throw new ConflictException("Событие можно редактировать только если оно находится в состоянии" +
                     " ожидания публикации");
         }
 
@@ -131,7 +131,7 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = updateFields(eventMapper.toUpdateEventRequest(updateEvent), event);
         Event savedEvent = eventRepository.save(updatedEvent);
 
-        getViews(List.of(savedEvent));
+        //getViews(List.of(savedEvent));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
         //eventFullDto.setViews(views);
         log.info("Событие успешно обновлено {}", eventFullDto);
@@ -185,9 +185,9 @@ public class EventServiceImpl implements EventService {
             events = eventRepository.findAll(page).getContent();
         }
 
-        getViews(events);
+        //getViews(events);
 
-        if (sort.equals("VIEWS")) {
+        if (sort != null && sort.equals("VIEWS")) {
             events.stream()
                     .sorted(Comparator.comparingInt(Event::getViews))
                     .collect(Collectors.toList());
@@ -207,7 +207,7 @@ public class EventServiceImpl implements EventService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Событие с id = " + eventId + " еще не опубликовано");
         }
-        getViews(List.of(event));
+        //getViews(List.of(event));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
         //eventFullDto.setViews(views);
         log.info("Событие успешно найдено {}", eventFullDto);
@@ -218,9 +218,9 @@ public class EventServiceImpl implements EventService {
     public Collection<EventShortDto> getAllEventsByUser(int userId, int from, int size) {
         log.info("Поиск всех событий пользователя с id {}, from {}, size {}", userId, from, size);
         checkUserExist(userId);
-        PageRequest page = PageRequest.of(from, size, Sort.by("event_id").ascending());
+        PageRequest page = PageRequest.of(from, size, Sort.by("id").ascending());
         List<Event> events = eventRepository.findByInitiatorId(userId, page);
-        getViews(events);
+        //getViews(events);
         log.info("События успешно найдены");
         return events.stream()
                 .map(EventMapper::toEventShortDto)
@@ -261,7 +261,7 @@ public class EventServiceImpl implements EventService {
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Событие с id = " + eventId + " не принадлежит пользователю с id = " + userId);
         }
-        getViews(List.of(event));
+        //getViews(List.of(event));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
         log.info("Событие успешно найдено {}", eventFullDto);
         return eventFullDto;
@@ -282,7 +282,7 @@ public class EventServiceImpl implements EventService {
         }
 
         if (event.getState().equals(EventState.PUBLISHED)) {
-            throw new ForbiddenException("Событие можно редактировать только если оно еще не опубликовано");
+            throw new ConflictException("Событие можно редактировать только если оно еще не опубликовано");
         }
 
         if (updateEvent.getStateAction() != null) {
@@ -296,7 +296,7 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = updateFields(eventMapper.toUpdateEventRequest(updateEvent), event);
         Event savedEvent = eventRepository.save(updatedEvent);
 
-        getViews(List.of(savedEvent));
+        //getViews(List.of(savedEvent));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
         log.info("Событие успешно обновлено {}", eventFullDto);
         return eventFullDto;
@@ -322,59 +322,97 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventRequestStatusUpdateResult updateEventRequestByUser(int userId, int eventId,
                                                                    EventRequestStatusUpdateRequest updateRequest) {
-        log.info("Подтверждение/отмена заявок на участие в событии с id {} пользователем с id {}", eventId, userId);
+        log.info("Подтверждение/отмена заявок на участие в событии с id {} пользователем с id {}, updateRequest {}",
+                eventId, userId, updateRequest);
         User user = checkUserExist(userId);
         Event event = checkEventExist(eventId);
 
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Событие с id = " + eventId + " не принадлежит пользователю с id = " + userId);
         }
+        log.info("Событие с id = " + eventId + " принадлежит пользователю с id = " + userId);
 
         int participantLimit = event.getParticipantLimit();
-        if (participantLimit == 0 || event.getRequestModeration().equals(Boolean.FALSE)) {
+        if (participantLimit == 0 && event.getRequestModeration().equals(Boolean.FALSE)) {
             throw new ConflictException("Подтверждение заявок не требуется");
         }
+        log.info("Требуется подтверждение заявок, т.к. лимит участников = {}, requestModeration {} ",
+                participantLimit, event.getRequestModeration());
 
         if (participantLimit == event.getConfirmedRequests()) {
             throw new ConflictException("Лимит участников исчерпан. Нельзя подтвердить заявку");
         }
+        log.info("Лимит участников не исчерпан, можно подтвердить заявки. Количество подтвержденных заявок на данный" +
+                " момент = " + event.getConfirmedRequests());
+
+        /*if (updateRequest.getIds() == null) {
+            throw new IncorrectParamException("Некорректный параметр запроса ids = " + updateRequest.getIds());
+        }*/
 
         List<Request> requests = requestRepository.findAllByIdIn(updateRequest.getIds());
-        if (!requests.isEmpty() && (requests.stream()
-                .map(Request::getStatus)
-                .anyMatch(s -> !s.equals(RequestStatus.PENDING)))) {
-            throw new ConflictException("Подтверждать заявки можно только в статусе ожидания");
+        log.info("Запросы выгружены из БД {}", requests);
+        if (!requests.isEmpty()) {
+            if (requests.stream()
+                    .map(Request::getStatus)
+                    .anyMatch(status -> !status.equals(RequestStatus.PENDING))) {
+                throw new ConflictException("Подтверждать заявки можно только в статусе ожидания");
+            }
         }
+        log.info("Заявки находятся в статусе ожидания. Подтверждение возможно");
 
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
         RequestStatus status = updateRequest.getStatus();
+        log.info("Подготовка к обработке заявок: сonfirmedRequests {}, rejectedRequests {}, status {}",
+                confirmedRequests.size(), rejectedRequests.size(), status.toString());
 
         for (Request request : requests) {
+            log.info("Запрос {}", request);
             if (event.getConfirmedRequests() < participantLimit) {
+                log.info("Количество подтвержденных заявок = {} меньше лимита участников {}",
+                        event.getConfirmedRequests(), participantLimit);
                 switch (status) {
                     case CONFIRMED:
+                        log.info("Статус Confirmed");
                         request.setStatus(RequestStatus.CONFIRMED);
+                        log.info("Установили запросу статус Confirmed {}", request.getStatus());
                         ParticipationRequestDto confirmedDto = requestMapper.toDto(request);
+                        log.info("Преобразовали запрос в dto {}", confirmedDto);
                         confirmedRequests.add(confirmedDto);
+                        log.info("Добавили запрос в список подтвержденных запросов {}", confirmedRequests);
                         event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+                        log.info("Добавили +1 к числу подтвержденных запросов событию с id {}, кол-во подт.запросов = {}",
+                                eventId, event.getConfirmedRequests());
                         break;
                     case REJECTED:
+                        log.info("Статус Rejected");
                         request.setStatus(RequestStatus.REJECTED);
+                        log.info("Установили запросу статус Rejected {}", request.getStatus());
                         ParticipationRequestDto rejectedDto = requestMapper.toDto(request);
+                        log.info("Преобразовали запрос в dto {}", rejectedDto);
                         rejectedRequests.add(rejectedDto);
+                        log.info("Добавили запрос в список отклоненных запросов {}", rejectedRequests);
                         break;
                     default:
+                        log.info("Неизвестный параметр статуса {}", status.toString());
                         throw new IncorrectParamException("Некорректный параметр статуса");
                 }
             } else {
+                throw new ConflictException("Лимит участников исчерпан. Нельзя подтвердить остальные заявки");
+                /*log.info("Количество подтвержденных заявок = {} равно лимиту участников {}",
+                        event.getConfirmedRequests(), participantLimit);
                 request.setStatus(RequestStatus.REJECTED);
+                log.info("Установили запросу статус Rejected {}", request.getStatus());
                 ParticipationRequestDto rejectedDto = requestMapper.toDto(request);
+                log.info("Преобразовали запрос в dto {}", rejectedDto);
                 rejectedRequests.add(rejectedDto);
+                log.info("Добавили запрос в список отклоненных запросов {}", rejectedRequests);*/
             }
         }
         eventRepository.save(event);
+        log.info("Сохранили в БД обновленное событие. Кол-во подтвержденных заявок {}", event.getConfirmedRequests());
         requestRepository.saveAll(requests);
+        log.info("Сохранили в БД обновленные заявки {}", requests);
         EventRequestStatusUpdateResult updateResult = new EventRequestStatusUpdateResult(confirmedRequests,
                 rejectedRequests);
         log.info("Заявки на участие успешно обновлены {}", updateResult);
@@ -402,7 +440,7 @@ public class EventServiceImpl implements EventService {
     private void checkTime(LocalDateTime eventDate) {
         log.info("Проверка времени начала события eventDate {}", eventDate);
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new ForbiddenException("Дата начала события не соответствует, установленым правилам");
+            throw new IncorrectParamException("Дата начала события не соответствует, установленым правилам");
         }
         log.info("Дата начала события прошла модерацию");
     }
@@ -425,7 +463,7 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
         String start = LocalDateTime.now().minusYears(20).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        ResponseEntity<Object> response = statsClient.getStats(start, end, uris, true);
+        ResponseEntity<Object> response = null; //statsClient.getStats(start, end, uris, true);
 
         List<ViewStatsDto> viewsList;
         /*try {
@@ -480,7 +518,9 @@ public class EventServiceImpl implements EventService {
             event.setDescription(updateEvent.getDescription());
         }
 
-        event.setEventDate(updateEvent.getEventDate());
+        if (updateEvent.getEventDate() != null) {
+            event.setEventDate(updateEvent.getEventDate());
+        }
 
         if (updateEvent.getLocation() != null) {
             event.setLocation(updateEvent.getLocation());

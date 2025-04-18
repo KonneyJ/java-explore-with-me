@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventPublicController {
     private final EventService eventService;
-    private final StatsClient statsClient;
+    //private final StatsClient statsClient;
 
     @GetMapping
     public Collection<EventShortDto> getAllEvents(@RequestParam(required = false) String text,
@@ -46,7 +46,7 @@ public class EventPublicController {
     }
 
     @GetMapping("/{id}")
-    public EventFullDto getEventById(@PathVariable("eventId") int eventId, HttpServletRequest request) {
+    public EventFullDto getEventById(@PathVariable("id") int eventId, HttpServletRequest request) {
         log.info("PUBLIC GET /events/id запрос with id {}", eventId);
         postHit(request);
         return eventService.getEventById(eventId);
@@ -62,7 +62,7 @@ public class EventPublicController {
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
                 .build();
-        statsClient.postHit(hitDto);
+        //statsClient.postHit(hitDto);
         log.info("Информация успешно отправлена");
     }
 }

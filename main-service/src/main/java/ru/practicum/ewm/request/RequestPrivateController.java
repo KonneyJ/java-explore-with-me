@@ -2,6 +2,7 @@ package ru.practicum.ewm.request;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;
@@ -24,8 +25,9 @@ public class RequestPrivateController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto createRequest(@PathVariable("userId") int userId,
-                                                 @PathVariable("eventId") int eventId) {
+                                                 @RequestParam("eventId") int eventId) {
         log.info("PRIVATE POST /users/{userId}/requests запрос with userId {}, eventId {}", userId, eventId);
         return requestService.createRequest(userId, eventId);
     }

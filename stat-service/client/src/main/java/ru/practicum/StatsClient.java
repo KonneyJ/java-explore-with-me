@@ -11,7 +11,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import java.util.List;
 import java.util.Map;
 
-@Service(value = "statsClient")
+@Service
 public class StatsClient extends BaseClient {
 
     /*@Value("${server.application.name:ewm-main-service}")
@@ -21,7 +21,7 @@ public class StatsClient extends BaseClient {
     private String serverUrl;*/
 
     @Autowired
-    public StatsClient(@Value("${stats-service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${server.url}")String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

@@ -17,7 +17,8 @@ import java.util.Set;
 public class NewCompilationDto {
     private Set<Integer> events;
 
-    private Boolean pinned;
+    @Builder.Default
+    private Boolean pinned = false;
 
     @NotNull
     @NotBlank

@@ -1,5 +1,6 @@
 package ru.practicum.ewm;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +23,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void postHit(@RequestBody EndpointHitDto endpointHitDto) {
+    public void postHit(@Valid @RequestBody EndpointHitDto endpointHitDto) {
         log.info("Post hit {}", endpointHitDto);
         service.saveHit(endpointHitDto);
     }
@@ -33,6 +34,8 @@ public class StatsController {
                                        @RequestParam(required = false) List<String> uris,
                                        @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Get stats with start {}, end {}, uris {} and unique {}", start, end, uris, unique);
-        return service.getStats(start, end, uris, unique);
+        List<ViewStatsDto> stats = service.getStats(start, end, uris, unique);
+        log.info("Статистика успешно получена {}", stats);
+        return stats;
     }
 }

@@ -45,7 +45,8 @@ public class StatsRepositoryImpl implements StatsRepository {
         } else {
             throw new InternalServerException("Не удалось сохранить данные");
         }
-        log.info("Сохранение успешно выполнено c id {}", id);
+        log.info("Сохранение успешно выполнено c id {}, app {}, uri {}, ip {}, timestamp {}", id, dto.getApp(),
+                dto.getUri(), dto.getIp(), dto.getTimestamp());
     }
 
     @Override
@@ -65,7 +66,7 @@ public class StatsRepositoryImpl implements StatsRepository {
     @Override
     public List<ViewStatsDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris) {
         log.info("Получение информации о статистике со всеми значениями в репозитории");
-        String query = "SELECT app, uri, COUNT(ip) AS hits FROM statistics WHERE (created BETWEEN ? AND ?) ";
+        String query = "SELECT app, uri, COUNT(ip) AS hits FROM statistics WHERE (created >= ? AND created <= ?) ";
         if (uris != null) {
             StringBuilder string = new StringBuilder("AND uri IN ('");
             string.append(String.join("', '", uris)).append("') ").toString();
@@ -73,6 +74,8 @@ public class StatsRepositoryImpl implements StatsRepository {
         }
         query += "GROUP BY app, uri ORDER BY hits DESC";
         log.info("Сформировано query для запроса {}", query);
-        return jdbc.query(query, mapper, start, end);
+        List<ViewStatsDto> stats = jdbc.query(query, mapper, start, end);
+        log.info("Список статистики из БД получен {}", stats);
+        return stats;
     }
 }

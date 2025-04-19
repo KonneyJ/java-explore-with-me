@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventPublicController {
     private final EventService eventService;
-    //private final StatsClient statsClient;
+    private final StatsClient statsClient;
 
     @GetMapping
     public Collection<EventShortDto> getAllEvents(@RequestParam(required = false) String text,

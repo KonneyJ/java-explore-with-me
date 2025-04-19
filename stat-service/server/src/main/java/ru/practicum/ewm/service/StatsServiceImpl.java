@@ -19,13 +19,18 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void saveHit(EndpointHitDto endpointHitDto) {
-        log.info("Сохранение запроса POST в сервисе");
+        log.info("Сохранение запроса POST в сервисе с endPointDto {}", endpointHitDto.toString());
         repository.saveHit(endpointHitDto);
     }
 
     @Override
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        log.info("Получение информации по запросу GET в сервисе");
+        log.info("Получение информации по запросу GET в сервисе c start {}, end {}, uris {}, unique {}", start, end,
+                uris, unique);
+        if (start == null || end == null) {
+            log.error("Отсутствует дата начала или окончания поиска. Start = {}, end = {}", start, end);
+            throw new BadRequestException("Отсутствует дата начала или окончания поиска");
+        }
         if (start.isAfter(end)) {
             log.error("Некорректные даты начала и окончания поиска");
             throw new BadRequestException("Дата начала не может быть после даты окончания поиска");

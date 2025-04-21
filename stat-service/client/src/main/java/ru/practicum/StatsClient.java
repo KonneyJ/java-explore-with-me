@@ -23,20 +23,21 @@ import java.util.Objects;
 public class StatsClient extends BaseClient {
     //private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Formatter.DATE_FORMAT);
 
-    /*@Value("${server.application.name:ewm-main-service}")
+    //@Value("${server.application.name:ewm-main-service}")
     private String applicationName;
 
-    @Value("${server.url}")
+    /*@Value("${server.url}")
     private String serverUrl;*/
 
     @Autowired
-    public StatsClient(@Value("${stats-server.url}")String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${stats-server.url}")String serverUrl, String applicationName, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
                         .requestFactory(() -> new HttpComponentsClientHttpRequestFactory())
                         .build()
         );
+        this.applicationName = applicationName;
     }
 
     public ResponseEntity<Object> postHit(EndpointHitDto endpointHitDto) {
@@ -47,9 +48,9 @@ public class StatsClient extends BaseClient {
     public ResponseEntity<Object> getStats(String start, String end, @Nullable List<String> uris, Boolean unique) {
         log.info("GetStats with start {}, end {}, uris {}, unique {}", start, end, uris, unique);
         /*Map<String, Object> parameters = Map.of(
-                "start", start.format(formatter),
-                "end", end.format(formatter),
-                "uris", String.join(",", uris),
+                "start", Objects.requireNonNull(start).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                "end", Objects.requireNonNull(end).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                "uris", String.join(",", Objects.requireNonNull(uris)),
                 "unique", unique
         );*/
         Map<String, Object> parameters;

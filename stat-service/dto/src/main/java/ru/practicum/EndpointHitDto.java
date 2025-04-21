@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode
+@ToString
 public class EndpointHitDto {
     private int id;
     @NotNull

@@ -69,11 +69,13 @@ public class RequestServiceImpl implements RequestService {
         Request request = new Request();
         if (event.getRequestModeration() && (event.getParticipantLimit() != 0)) {
             request.setStatus(RequestStatus.PENDING);
+            log.info("Добавлена 1 неподтвержденная заявка на участие. Было подтвержденных заявок {}, стало {}",
+                    confirmedRequests, event.getConfirmedRequests());
         } else {
             request.setStatus(RequestStatus.CONFIRMED);
             event.setConfirmedRequests(confirmedRequests + 1);
             Event savedEvent = eventRepository.save(event);
-            log.info("Добавлена 1 подтвержденная заявка на участие. Было заявок {}, стало {}",
+            log.info("Добавлена 1 подтвержденная заявка на участие. Было подтвержденных заявок {}, стало {}",
                     confirmedRequests, savedEvent.getConfirmedRequests());
         }
 
@@ -82,7 +84,9 @@ public class RequestServiceImpl implements RequestService {
         request.setRequester(user);
         Request savedRequest = requestRepository.save(request);
         log.info("Заявка на событие успешно сохранена с id {}", savedRequest.getId());
-        return requestMapper.toDto(savedRequest);
+        ParticipationRequestDto dto = requestMapper.toDto(savedRequest);
+        log.info("Возвращаем в ответ {}", dto);
+        return dto;
     }
 
     @Override

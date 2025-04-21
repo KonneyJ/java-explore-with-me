@@ -14,11 +14,12 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "requests")
 @Builder
+@ToString
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id")
-    private int id;
+    private Integer id;
 
     @Column(name = "created")
     private LocalDateTime created;

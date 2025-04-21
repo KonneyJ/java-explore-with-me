@@ -23,7 +23,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
-@Validated
+ @Validated
 public class EventPrivateController {
     private final EventService eventService;
 

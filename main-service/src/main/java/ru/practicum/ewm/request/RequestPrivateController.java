@@ -29,7 +29,9 @@ public class RequestPrivateController {
     public ParticipationRequestDto createRequest(@PathVariable("userId") int userId,
                                                  @RequestParam("eventId") int eventId) {
         log.info("PRIVATE POST /users/{userId}/requests запрос with userId {}, eventId {}", userId, eventId);
-        return requestService.createRequest(userId, eventId);
+        ParticipationRequestDto dto = requestService.createRequest(userId, eventId);
+        log.info("В контроллере вернулось dto {}", dto);
+        return dto;
     }
 
     @PatchMapping("/{requestId}/cancel")

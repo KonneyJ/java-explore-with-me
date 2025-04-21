@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.practicum.StatsClient;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.category.CategoryRepository;
@@ -22,7 +21,6 @@ import ru.practicum.ewm.event.model.enums.StateActionUser;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.repository.LocationRepository;
 import ru.practicum.ewm.exceptions.ConflictException;
-import ru.practicum.ewm.exceptions.ForbiddenException;
 import ru.practicum.ewm.exceptions.IncorrectParamException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 import ru.practicum.ewm.request.RequestRepository;
@@ -345,11 +343,7 @@ public class EventServiceImpl implements EventService {
         log.info("Лимит участников не исчерпан, можно подтвердить заявки. Количество подтвержденных заявок на данный" +
                 " момент = " + event.getConfirmedRequests());
 
-        /*if (updateRequest.getIds() == null) {
-            throw new IncorrectParamException("Некорректный параметр запроса ids = " + updateRequest.getIds());
-        }*/
-
-        List<Request> requests = requestRepository.findAllByIdIn(updateRequest.getIds());
+        List<Request> requests = requestRepository.findAllByIdIn(updateRequest.getRequestIds());
         log.info("Запросы выгружены из БД {}", requests);
         if (!requests.isEmpty()) {
             if (requests.stream()

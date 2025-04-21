@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Service
+@Service(value = "statsClient")
 @Slf4j
 public class StatsClient extends BaseClient {
     //private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Formatter.DATE_FORMAT);
@@ -29,8 +29,8 @@ public class StatsClient extends BaseClient {
     /*@Value("${server.url}")
     private String serverUrl;*/
 
-    @Autowired
-    public StatsClient(@Value("${stats-server.url}")String serverUrl, String applicationName, RestTemplateBuilder builder) {
+    //@Autowired
+    public StatsClient(@Value("${stats-server.url}")String serverUrl, @Value("${application.name}") String applicationName, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

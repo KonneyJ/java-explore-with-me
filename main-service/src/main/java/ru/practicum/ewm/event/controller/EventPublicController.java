@@ -62,7 +62,7 @@ public class EventPublicController {
                 .ip(ip)
                 .timestamp(LocalDateTime.now())
                 .build();
-        //statsClient.postHit(hitDto);
+        statsClient.postHit(hitDto);
         log.info("Информация успешно отправлена");
     }
 }

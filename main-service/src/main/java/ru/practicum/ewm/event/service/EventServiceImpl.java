@@ -1,5 +1,7 @@
 package ru.practicum.ewm.event.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.BooleanBuilder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.practicum.StatsClient;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.category.CategoryRepository;
@@ -49,7 +52,8 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
     private final RequestMapper requestMapper;
-    //private final StatsClient statsClient;
+    private final StatsClient statsClient;
+    private final ObjectMapper viewMapper;
 
     @Override
     public Collection<EventFullDto> getAllEventsByAdmin(List<Integer> users, List<EventState> states,
@@ -59,7 +63,7 @@ public class EventServiceImpl implements EventService {
         if (rangeStart != null && rangeEnd != null && (rangeStart.isAfter(rangeEnd))) {
             throw new IncorrectParamException("Дата начала поиска не может быть после даты окончания поиска");
         }
-        List<Event> events = new ArrayList<>();
+        List<Event> events;
         PageRequest page = PageRequest.of(from, size, Sort.by("eventDate").ascending());
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -93,7 +97,7 @@ public class EventServiceImpl implements EventService {
             events = eventRepository.findAll(page).getContent();
         }
 
-        //getViews(events);
+        getViews(events);
 
         log.info("События успешно найдены");
         return events.stream()
@@ -129,9 +133,8 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = updateFields(eventMapper.toUpdateEventRequest(updateEvent), event);
         Event savedEvent = eventRepository.save(updatedEvent);
 
-        //getViews(List.of(savedEvent));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
-        //eventFullDto.setViews(views);
+        eventFullDto.setViews(0);
         log.info("Событие успешно обновлено {}", eventFullDto);
         return eventFullDto;
     }
@@ -146,7 +149,7 @@ public class EventServiceImpl implements EventService {
             throw new IncorrectParamException("Дата начала поиска не может быть после даты окончания поиска");
         }
 
-        List<Event> events = new ArrayList<>();
+        List<Event> events;
         PageRequest page = PageRequest.of(from, size, Sort.by("eventDate").ascending());
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(QEvent.event.state.eq(EventState.PUBLISHED));
@@ -183,7 +186,7 @@ public class EventServiceImpl implements EventService {
             events = eventRepository.findAll(page).getContent();
         }
 
-        //getViews(events);
+        getViews(events);
 
         if (sort != null && sort.equals("VIEWS")) {
             events.stream()
@@ -205,9 +208,8 @@ public class EventServiceImpl implements EventService {
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Событие с id = " + eventId + " еще не опубликовано");
         }
-        //getViews(List.of(event));
+        getViews(List.of(event));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
-        //eventFullDto.setViews(views);
         log.info("Событие успешно найдено {}", eventFullDto);
         return eventFullDto;
     }
@@ -218,7 +220,7 @@ public class EventServiceImpl implements EventService {
         checkUserExist(userId);
         PageRequest page = PageRequest.of(from, size, Sort.by("id").ascending());
         List<Event> events = eventRepository.findByInitiatorId(userId, page);
-        //getViews(events);
+        getViews(events);
         log.info("События успешно найдены");
         return events.stream()
                 .map(EventMapper::toEventShortDto)
@@ -237,6 +239,7 @@ public class EventServiceImpl implements EventService {
         event.setConfirmedRequests(0);
         event.setCreatedOn(LocalDateTime.now());
         event.setInitiator(user);
+        event.setViews(0);
 
         if (newEventDto.getLocation() != null) {
             Location location = locationRepository.save(newEventDto.getLocation());
@@ -247,7 +250,7 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Событие успешно сохранено с id {}", savedEvent.getId());
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
-        eventFullDto.setViews(0);
+        //eventFullDto.setViews(0);
         return eventFullDto;
     }
 
@@ -259,7 +262,7 @@ public class EventServiceImpl implements EventService {
         if (event.getInitiator().getId() != userId) {
             throw new NotFoundException("Событие с id = " + eventId + " не принадлежит пользователю с id = " + userId);
         }
-        //getViews(List.of(event));
+        getViews(List.of(event));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(event);
         log.info("Событие успешно найдено {}", eventFullDto);
         return eventFullDto;
@@ -294,7 +297,7 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = updateFields(eventMapper.toUpdateEventRequest(updateEvent), event);
         Event savedEvent = eventRepository.save(updatedEvent);
 
-        //getViews(List.of(savedEvent));
+        getViews(List.of(savedEvent));
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
         log.info("Событие успешно обновлено {}", eventFullDto);
         return eventFullDto;
@@ -448,6 +451,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private void getViews(List<Event> events) {
+        log.info("Получение информации о просмотрах из сервиса статистики");
         if (events.isEmpty()) {
             return;
         }
@@ -457,42 +461,32 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
         String start = LocalDateTime.now().minusYears(20).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        ResponseEntity<Object> response = null; //statsClient.getStats(start, end, uris, true);
+        log.info("Отправка запроса с параметрами: start {}, end {}, uris {}", start, end, uris);
+        ResponseEntity<Object> response = statsClient.getStats(start, end, uris, false);
+        log.info("Получили response из сервиса статистики {}", response);
 
-        List<ViewStatsDto> viewsList;
-        /*try {
+        List<ViewStatsDto> viewsList = new ArrayList<>();
+        Map<Integer, Integer> viewsMap;
+        try {
             viewsList = viewMapper.convertValue(response.getBody(), new TypeReference<>() {
             });
+            log.info("Получили список просмотров из сервиса статистики {}", viewsList);
         } catch (IllegalArgumentException e) {
             if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                throw new IncorrectParamException("Ошибка параметров запроса. Некорректный статус - " + response.getStatusCode());
+                throw new IncorrectParamException("Некорректный статус - " + response.getStatusCode());
             }
-            return Collections.emptyMap();
-        }*/
-        //Извлекаем тело ответа
-        Object responseBody = response.getBody();
-        //Проверяем, что тело ответа является списком
-        if (responseBody instanceof List) {
-            viewsList = (List<ViewStatsDto>) responseBody;
-            //Теперь viewList содержит объекты ViewDto из исходного списка
-        } else {
-            if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                throw new IncorrectParamException("Ошибка параметров запроса. Некорректный статус - "
-                        + response.getStatusCode());
-            }
-            return;
         }
-        Map<Integer, Integer> viewsMap = viewsList.stream()
-                .filter(statsDto -> statsDto.getUri().startsWith("/events/"))
+
+        viewsMap = viewsList.stream()
+                .filter(dto -> dto.getUri().startsWith("/events/"))
                 .collect(Collectors.toMap(
-                        statsDto -> Integer.parseInt(statsDto.getUri().substring("/events/".length())),
+                        dto -> Integer.parseInt(dto.getUri().substring("/events/".length())),
                         ViewStatsDto::getHits
                 ));
-        /*Map<Integer, Integer> viewsMap = viewsList.stream()
-                .collect(Collectors.toMap(
-                        statsDto -> Integer.parseInt(statsDto.getUri().substring("/events/".length())),
-                        ViewStatsDto::getHits));*/
+        log.info("Сформировали хэшмапу с айдишниками и количеством просмотров {}", viewsMap);
+
         for (Event event : events) {
+            log.info("Инициализация поля views = {} для event с id {} значением {}", event.getViews(), event.getId(), viewsMap.getOrDefault(event.getId(), 0));
             event.setViews(viewsMap.getOrDefault(event.getId(), 0));
         }
     }

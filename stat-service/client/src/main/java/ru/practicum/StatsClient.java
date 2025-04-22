@@ -2,7 +2,6 @@ package ru.practicum;
 
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +11,6 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -21,16 +18,10 @@ import java.util.Objects;
 @Service(value = "statsClient")
 @Slf4j
 public class StatsClient extends BaseClient {
-    //private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Formatter.DATE_FORMAT);
 
-    //@Value("${server.application.name:ewm-main-service}")
     private String applicationName;
 
-    /*@Value("${server.url}")
-    private String serverUrl;*/
-
-    //@Autowired
-    public StatsClient(@Value("${stats-server.url}")String serverUrl, @Value("${application.name}") String applicationName, RestTemplateBuilder builder) {
+    public StatsClient(@Value("${stats-server.url}") String serverUrl, @Value("${application.name}") String applicationName, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -41,7 +32,7 @@ public class StatsClient extends BaseClient {
     }
 
     public ResponseEntity<Object> postHit(EndpointHitDto endpointHitDto) {
-        log.info("PostHit with endpointHitDto {}", endpointHitDto);
+        log.info("PostHit with endpointHitDto {} в клиенте", endpointHitDto);
         return post("/hit", endpointHitDto);
     }
 

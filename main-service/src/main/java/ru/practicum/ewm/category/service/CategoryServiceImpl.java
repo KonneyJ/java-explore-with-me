@@ -13,7 +13,6 @@ import ru.practicum.ewm.category.dto.NewCategoryDto;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exceptions.ConflictException;
-import ru.practicum.ewm.exceptions.ForbiddenException;
 import ru.practicum.ewm.exceptions.NotFoundException;
 
 import java.util.Collection;

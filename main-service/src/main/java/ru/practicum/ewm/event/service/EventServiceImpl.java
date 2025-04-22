@@ -134,7 +134,6 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(updatedEvent);
 
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
-        eventFullDto.setViews(0);
         log.info("Событие успешно обновлено {}", eventFullDto);
         return eventFullDto;
     }
@@ -462,7 +461,7 @@ public class EventServiceImpl implements EventService {
         String start = LocalDateTime.now().minusYears(20).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String end = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         log.info("Отправка запроса с параметрами: start {}, end {}, uris {}", start, end, uris);
-        ResponseEntity<Object> response = statsClient.getStats(start, end, uris, false);
+        ResponseEntity<Object> response = statsClient.getStats(start, end, uris, true);
         log.info("Получили response из сервиса статистики {}", response);
 
         List<ViewStatsDto> viewsList = new ArrayList<>();

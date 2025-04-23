@@ -1,4 +1,4 @@
-package ru.practicum.ewm.event.dto;
+package ru.practicum.ewm.event.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +24,6 @@ public class NewEventDto {
     private String annotation;
 
     @NotNull(message = "Поле category не может быть null")
-    //@NotBlank(message = "Поле category не может быть пустым")
     private Integer category;
 
     @NotNull(message = "Поле description не может быть null")
@@ -37,7 +36,6 @@ public class NewEventDto {
     private LocalDateTime eventDate;
 
     @NotNull(message = "Поле location не может быть null")
-    //@NotBlank(message = "Поле location не может быть пустым")
     private Location location;
 
     @Builder.Default

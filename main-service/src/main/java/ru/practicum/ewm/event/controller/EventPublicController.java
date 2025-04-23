@@ -9,8 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.StatsClient;
-import ru.practicum.ewm.event.dto.EventFullDto;
-import ru.practicum.ewm.event.dto.EventShortDto;
+import ru.practicum.ewm.event.dto.event.EventFullDto;
+import ru.practicum.ewm.event.dto.event.EventShortDto;
 import ru.practicum.ewm.event.service.EventService;
 
 import java.time.LocalDateTime;

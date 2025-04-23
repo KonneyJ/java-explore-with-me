@@ -1,7 +1,8 @@
-package ru.practicum.ewm.event.dto;
+package ru.practicum.ewm.event.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.category.dto.CategoryMapper;
+import ru.practicum.ewm.event.dto.event.*;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.dto.UserMapper;
 

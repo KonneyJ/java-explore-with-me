@@ -21,7 +21,7 @@
     </properties>
 
     <modules>
-        <module>server</module>
+        <module>stats-server</module>
         <module>client</module>
         <module>dto</module>
     </modules>

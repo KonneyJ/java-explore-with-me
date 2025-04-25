@@ -115,7 +115,7 @@ public class LikeServiceImpl implements LikeService {
         Event event = checkEventExist(eventId);
         Like like = checkLikeExist(likeId);
 
-        if (like.getUser().getId() != userId || event.getInitiator().getId() != userId) {
+        if ((like.getUser().getId() != userId) && (event.getInitiator().getId() != userId)) {
             throw new ConflictException("Лайк может посмотреть либо владелец события, либо человек, который его поставил");
         }
         LikeFullDto likeFullDto = likeMapper.toFullDto(like);

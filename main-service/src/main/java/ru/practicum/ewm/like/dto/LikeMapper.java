@@ -12,7 +12,7 @@ public class LikeMapper {
                 .user(like.getUser().getId())
                 .event(like.getEvent().getId())
                 .request(like.getRequest().getId())
-                .createdOn(like.getCreatedOn())
+                .created(like.getCreatedOn())
                 .build();
     }
 
@@ -20,7 +20,7 @@ public class LikeMapper {
         return LikeShortDto.builder()
                 .id(like.getId())
                 .liked(like.getLiked())
-                .createdOn(like.getCreatedOn())
+                .created(like.getCreatedOn())
                 .build();
     }
 }

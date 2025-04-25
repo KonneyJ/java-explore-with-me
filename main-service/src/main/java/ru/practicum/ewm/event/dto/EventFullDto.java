@@ -1,4 +1,4 @@
-package ru.practicum.ewm.event.dto.event;
+package ru.practicum.ewm.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.event.model.Location;
+import ru.practicum.ewm.event.model.enums.EventState;
 import ru.practicum.ewm.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EventShortDto {
+public class EventFullDto {
     private Integer id;
 
     @NotNull(message = "Поле annotation не может быть null")
@@ -29,6 +31,11 @@ public class EventShortDto {
 
     private Integer confirmedRequests;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdOn;
+
+    private String description;
+
     @NotNull(message = "Поле eventDate не может быть null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
@@ -37,8 +44,21 @@ public class EventShortDto {
     @NotBlank(message = "Поле initiator не может быть пустым")
     private UserShortDto initiator;
 
+    @NotNull(message = "Поле location не может быть null")
+    @NotBlank(message = "Поле location не может быть пустым")
+    private Location location;
+
     @NotBlank(message = "Поле paid не может быть пустым")
     private Boolean paid;
+
+    private Integer participantLimit;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime publishedOn;
+
+    private Boolean requestModeration;
+
+    private EventState state;
 
     @NotNull(message = "Поле title не может быть null")
     @NotBlank(message = "Поле title не может быть пустым")

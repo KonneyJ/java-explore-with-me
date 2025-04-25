@@ -1,6 +1,6 @@
 package ru.practicum.ewm.event.service;
 
-import ru.practicum.ewm.event.dto.event.*;
+import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.model.enums.EventState;
 import ru.practicum.ewm.request.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.ewm.request.dto.EventRequestStatusUpdateResult;

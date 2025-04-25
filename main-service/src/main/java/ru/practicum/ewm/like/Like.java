@@ -1,7 +1,8 @@
-package ru.practicum.ewm.event.model;
+package ru.practicum.ewm.like;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.user.User;
 

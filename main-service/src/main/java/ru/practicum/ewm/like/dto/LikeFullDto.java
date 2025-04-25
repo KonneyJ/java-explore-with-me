@@ -1,4 +1,4 @@
-package ru.practicum.ewm.event.dto.like;
+package ru.practicum.ewm.like.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;

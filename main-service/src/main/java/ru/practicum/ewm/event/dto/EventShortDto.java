@@ -1,15 +1,14 @@
-package ru.practicum.ewm.event.dto.event;
+package ru.practicum.ewm.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.ewm.event.model.Location;
+import ru.practicum.ewm.category.dto.CategoryDto;
+import ru.practicum.ewm.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
 
@@ -17,39 +16,33 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewEventDto {
+public class EventShortDto {
+    private Integer id;
+
     @NotNull(message = "Поле annotation не может быть null")
     @NotBlank(message = "Поле annotation не может быть пустым")
-    @Size(min = 20, max = 2000)
     private String annotation;
 
     @NotNull(message = "Поле category не может быть null")
-    private Integer category;
+    @NotBlank(message = "Поле category не может быть пустым")
+    private CategoryDto category;
 
-    @NotNull(message = "Поле description не может быть null")
-    @NotBlank(message = "Поле description не может быть пустым")
-    @Size(min = 20, max = 7000)
-    private String description;
+    private Integer confirmedRequests;
 
     @NotNull(message = "Поле eventDate не может быть null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    @NotNull(message = "Поле location не может быть null")
-    private Location location;
+    @NotNull(message = "Поле initiator не может быть null")
+    @NotBlank(message = "Поле initiator не может быть пустым")
+    private UserShortDto initiator;
 
-    @Builder.Default
-    private Boolean paid = false;
-
-    @PositiveOrZero
-    @Builder.Default
-    private Integer participantLimit = 0;
-
-    @Builder.Default
-    private Boolean requestModeration = true;
+    @NotBlank(message = "Поле paid не может быть пустым")
+    private Boolean paid;
 
     @NotNull(message = "Поле title не может быть null")
     @NotBlank(message = "Поле title не может быть пустым")
-    @Size(min = 3, max = 120)
     private String title;
+
+    private Integer views;
 }

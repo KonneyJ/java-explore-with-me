@@ -1,14 +1,16 @@
-package ru.practicum.ewm.event.controller;
+package ru.practicum.ewm.like;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.event.dto.like.LikeFullDto;
-import ru.practicum.ewm.event.dto.like.LikeShortDto;
-import ru.practicum.ewm.event.dto.like.NewLikeDto;
-import ru.practicum.ewm.event.service.LikeService;
+import ru.practicum.ewm.like.dto.LikeFullDto;
+import ru.practicum.ewm.like.dto.LikeShortDto;
+import ru.practicum.ewm.like.dto.NewLikeDto;
+import ru.practicum.ewm.like.service.LikeService;
 
 import java.util.Collection;
 
@@ -59,14 +61,19 @@ public class LikePrivateController {
 
     @GetMapping("/events/{eventId}/likes")
     public Collection<LikeShortDto> getAllLikesByEvent(@PathVariable("userId") int userId,
-                                                       @PathVariable("eventId") int eventId) {
-        log.info("PRIVATE GET /users/{userId}/events/{eventId}/likes запрос with userId {}, eventId {}", userId, eventId);
-        return likeService.getAllLikesByEvent(userId, eventId);
+                                                       @PathVariable("eventId") int eventId,
+                                                       @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                       @RequestParam(defaultValue = "10") @Positive int size) {
+        log.info("PRIVATE GET /users/{userId}/events/{eventId}/likes запрос with userId {}, eventId {}, from {}, " +
+                "size {}", userId, eventId, from, size);
+        return likeService.getAllLikesByEvent(userId, eventId, from, size);
     }
 
     @GetMapping("/likes")
-    public Collection<LikeShortDto> getAllLikesByUser(@PathVariable("userId") int userId) {
-        log.info("PRIVATE GET /users/{userId}/likes запрос with userId {}", userId);
-        return likeService.getAllLikesByUser(userId);
+    public Collection<LikeShortDto> getAllLikesByUser(@PathVariable("userId") int userId,
+                                                      @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                      @RequestParam(defaultValue = "10") @Positive int size) {
+        log.info("PRIVATE GET /users/{userId}/likes запрос with userId {}, from {}, size {}", userId, from, size);
+        return likeService.getAllLikesByUser(userId, from, size);
     }
 }

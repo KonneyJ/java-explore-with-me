@@ -14,7 +14,7 @@ import ru.practicum.StatsClient;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.ewm.category.Category;
 import ru.practicum.ewm.category.CategoryRepository;
-import ru.practicum.ewm.event.dto.event.*;
+import ru.practicum.ewm.event.dto.*;
 import ru.practicum.ewm.event.mapper.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.Location;
@@ -250,7 +250,6 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         log.info("Событие успешно сохранено с id {}", savedEvent.getId());
         EventFullDto eventFullDto = eventMapper.toEventFullDto(savedEvent);
-        //eventFullDto.setViews(0);
         return eventFullDto;
     }
 

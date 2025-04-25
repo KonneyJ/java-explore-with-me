@@ -306,7 +306,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"annotation\": \"Бачата вечеринка El Grande клуб Jenavi\",\n    \"category\": 1,\n    \"description\": \"Бачата вечеринка El Grande пройдет 26 мая в клубе Jenavi в городе Санкт-Петербург. Возьмите с собой отличное настроение. Дресс-код - элегантный. \",\n    \"eventDate\": \"2025-05-26 21:00:00\",\n    \"location\": {\n    \"lat\": 56.82,\n    \"lon\": 23.54\n  },\n    \"requestModeration\": false,\n    \"title\": \"Бачата вечеринка El Grande\"\n}",
+							"raw": "{\n    \"annotation\": \"Бачата вечеринка El Grande клуб Jenavi\",\n    \"category\": 122,\n    \"description\": \"Бачата вечеринка El Grande пройдет 26 мая в клубе Jenavi в городе Санкт-Петербург. Возьмите с собой отличное настроение. Дресс-код - элегантный. \",\n    \"eventDate\": \"2025-05-26 21:00:00\",\n    \"location\": {\n    \"lat\": 56.82,\n    \"lon\": 23.54\n  },\n    \"requestModeration\": false,\n    \"title\": \"Бачата вечеринка El Grande\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -314,14 +314,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/users/1/events",
+							"raw": "localhost:8080/users/137/events",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"users",
-								"1",
+								"137",
 								"events"
 							]
 						}
@@ -373,7 +373,7 @@
 							"variable": [
 								{
 									"key": "eventId",
-									"value": "1"
+									"value": "107"
 								}
 							]
 						}
@@ -415,20 +415,20 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/users/2/requests?eventId=1",
+							"raw": "localhost:8080/users/138/requests?eventId=107",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"users",
-								"2",
+								"138",
 								"requests"
 							],
 							"query": [
 								{
 									"key": "eventId",
-									"value": "1",
+									"value": "107",
 									"description": "(Required) id события"
 								}
 							]
@@ -481,16 +481,16 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/users/2/events/1/likes",
+					"raw": "localhost:8080/users/138/events/107/likes",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"2",
+						"138",
 						"events",
-						"1",
+						"107",
 						"likes"
 					]
 				}
@@ -531,16 +531,16 @@
 				"method": "PATCH",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/2/events/1/likes/1",
+					"raw": "localhost:8080/users/138/events/107/likes/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"2",
+						"138",
 						"events",
-						"1",
+						"107",
 						"likes",
 						"1"
 					]
@@ -582,16 +582,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/2/events/1/likes/1",
+					"raw": "localhost:8080/users/138/events/107/likes/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"2",
+						"138",
 						"events",
-						"1",
+						"107",
 						"likes",
 						"1"
 					]
@@ -621,16 +621,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/1/events/1/likes",
+					"raw": "localhost:8080/users/137/events/107/likes",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"1",
+						"137",
 						"events",
-						"1",
+						"107",
 						"likes"
 					]
 				}
@@ -659,14 +659,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/2/likes",
+					"raw": "localhost:8080/users/138/likes",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"2",
+						"138",
 						"likes"
 					]
 				}
@@ -693,16 +693,16 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/2/events/1/likes/1",
+					"raw": "localhost:8080/users/138/events/107/likes/1",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"users",
-						"2",
+						"138",
 						"events",
-						"1",
+						"107",
 						"likes",
 						"1"
 					]

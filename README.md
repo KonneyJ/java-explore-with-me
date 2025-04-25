@@ -1,6 +1,9 @@
 # java-explore-with-me
 Template repository for ExploreWithMe project.
 
+#Ссылка на pull-request
+https://github.com/KonneyJ/java-explore-with-me/pull/3
+
 # Реализация дополнительной функциональности: likes
 1) POST /users/{userId}/events/{eventId}/likes
 - добавление лайка событию

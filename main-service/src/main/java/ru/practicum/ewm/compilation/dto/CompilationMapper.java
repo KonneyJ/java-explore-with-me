@@ -2,7 +2,7 @@ package ru.practicum.ewm.compilation.dto;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.compilation.Compilation;
-import ru.practicum.ewm.event.dto.EventMapper;
+import ru.practicum.ewm.event.mapper.EventMapper;
 
 import java.util.stream.Collectors;
 
